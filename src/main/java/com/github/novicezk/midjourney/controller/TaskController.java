@@ -1,6 +1,8 @@
 package com.github.novicezk.midjourney.controller;
 
 import cn.hutool.core.comparator.CompareUtil;
+import cn.hutool.core.util.StrUtil;
+import com.github.novicezk.midjourney.ProxyProperties;
 import com.github.novicezk.midjourney.dto.TaskConditionDTO;
 import com.github.novicezk.midjourney.loadbalancer.DiscordLoadBalancer;
 import com.github.novicezk.midjourney.service.TaskStoreService;
@@ -28,11 +30,14 @@ import java.util.Objects;
 public class TaskController {
 	private final TaskStoreService taskStoreService;
 	private final DiscordLoadBalancer discordLoadBalancer;
+	private final ProxyProperties properties;
 
 	@ApiOperation(value = "指定ID获取任务")
 	@GetMapping("/{id}/fetch")
 	public Task fetch(@ApiParam(value = "任务ID") @PathVariable String id) {
-		return this.taskStoreService.get(id);
+		Task task = this.taskStoreService.get(id);
+		task.setImageUrl(imgUrlChange(task.getImageUrl()));
+		return task;
 	}
 
 	@ApiOperation(value = "查询任务队列")
@@ -59,6 +64,15 @@ public class TaskController {
 			return Collections.emptyList();
 		}
 		return conditionDTO.getIds().stream().map(this.taskStoreService::get).filter(Objects::nonNull).toList();
+	}
+
+	private String imgUrlChange(String imgUrl) {
+		if (StrUtil.isBlank(imgUrl)) {
+			return imgUrl;
+		}
+
+		String newurl = StrUtil.replace(imgUrl, properties.getImgProxy().getExitdomain(), properties.getImgProxy().getPredomain());
+		return newurl;
 	}
 
 }

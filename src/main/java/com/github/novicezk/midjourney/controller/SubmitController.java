@@ -2,6 +2,7 @@ package com.github.novicezk.midjourney.controller;
 
 import cn.hutool.core.text.CharSequenceUtil;
 import cn.hutool.core.util.RandomUtil;
+import cn.hutool.core.util.StrUtil;
 import com.github.novicezk.midjourney.Constants;
 import com.github.novicezk.midjourney.ProxyProperties;
 import com.github.novicezk.midjourney.ReturnCode;
@@ -122,7 +123,7 @@ public class SubmitController {
 			if (existTask != null) {
 				return SubmitResultVO.of(ReturnCode.EXISTED, "任务已存在", existTask.getId())
 						.setProperty("status", existTask.getStatus())
-						.setProperty("imageUrl", existTask.getImageUrl());
+						.setProperty("imageUrl", imgUrlChange(existTask.getImageUrl()));
 			}
 		}
 		Task targetTask = this.taskStoreService.get(changeDTO.getTaskId());
@@ -224,5 +225,14 @@ public class SubmitController {
 			promptEn = prompt;
 		}
 		return promptEn;
+	}
+
+	private String imgUrlChange(String imgUrl) {
+		if (StrUtil.isBlank(imgUrl)) {
+			return imgUrl;
+		}
+
+		String newurl = StrUtil.replace(imgUrl, properties.getImgProxy().getExitdomain(), properties.getImgProxy().getPredomain());
+		return newurl;
 	}
 }

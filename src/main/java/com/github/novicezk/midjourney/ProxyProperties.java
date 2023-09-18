@@ -62,6 +62,21 @@ public class ProxyProperties {
 	 */
 	private int notifyPoolSize = 10;
 
+	private final ImgProxy imgProxy = new ImgProxy();
+
+	@Data
+	public static class ImgProxy {
+		/**
+		 * 替换后的域名
+		 */
+		private String predomain;
+		/**
+		 * 现在返回的域名 也就是准备替换的域名
+		 */
+		private String exitdomain;
+	}
+
+
 	@Data
 	public static class DiscordAccountConfig {
 		/**

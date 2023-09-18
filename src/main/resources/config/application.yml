@@ -7,7 +7,7 @@ logging:
     ROOT: info
     com.github.novicezk.midjourney: debug
 knife4j:
-  enable: true
+  enable: false
   openapi:
     title: Midjourney Proxy API文档
     description: 代理 MidJourney 的discord频道，实现api形式调用AI绘图

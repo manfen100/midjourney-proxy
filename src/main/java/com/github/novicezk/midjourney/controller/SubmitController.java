@@ -230,15 +230,17 @@ public class SubmitController {
 	}
 
 	private String imgUrlChange(String imgUrl) {
-		log.info("传入的url:{}", imgUrl);
+		log.info("submit 传入的url:{}", imgUrl);
 		if (StrUtil.isBlank(imgUrl)) {
 			return imgUrl;
 		}
 
 		String newurl = StrUtil.replace(imgUrl, properties.getImgProxy().getExitdomain(), properties.getImgProxy().getPredomain());
-		log.info("替换域名,{}", newurl);
-		String back= newurl.substring(0, newurl.indexOf("?"));
-		log.info("去掉后缀,{}", back);
-		return back;
+		log.info("submit替换域名,{}", newurl);
+		int index = newurl.indexOf("?");
+		String result = (index != -1) ? newurl.substring(0, index) : newurl;
+		log.info("submit去掉后缀,{}", result);
+		return result;
 	}
+
 }

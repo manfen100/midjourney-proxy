@@ -30,55 +30,57 @@ import java.util.Objects;
 @RequiredArgsConstructor
 @Slf4j
 public class TaskController {
-	private final TaskStoreService taskStoreService;
-	private final DiscordLoadBalancer discordLoadBalancer;
-	private final ProxyProperties properties;
+    private final TaskStoreService taskStoreService;
+    private final DiscordLoadBalancer discordLoadBalancer;
+    private final ProxyProperties properties;
 
-	@ApiOperation(value = "指定ID获取任务")
-	@GetMapping("/{id}/fetch")
-	public Task fetch(@ApiParam(value = "任务ID") @PathVariable String id) {
-		Task task = this.taskStoreService.get(id);
-		task.setImageUrl(imgUrlChange(task.getImageUrl()));
-		return task;
-	}
+    @ApiOperation(value = "指定ID获取任务")
+    @GetMapping("/{id}/fetch")
+    public Task fetch(@ApiParam(value = "任务ID") @PathVariable String id) {
+        log.info("{id}/fetch {}", id);
+        Task task = this.taskStoreService.get(id);
+        task.setImageUrl(imgUrlChange(task.getImageUrl()));
+        return task;
+    }
 
-	@ApiOperation(value = "查询任务队列")
-	@GetMapping("/queue")
-	public List<Task> queue() {
-		return this.discordLoadBalancer.getQueueTaskIds().stream()
-				.map(this.taskStoreService::get).filter(Objects::nonNull)
-				.sorted(Comparator.comparing(Task::getSubmitTime))
-				.toList();
-	}
+    @ApiOperation(value = "查询任务队列")
+    @GetMapping("/queue")
+    public List<Task> queue() {
+        return this.discordLoadBalancer.getQueueTaskIds().stream()
+                .map(this.taskStoreService::get).filter(Objects::nonNull)
+                .sorted(Comparator.comparing(Task::getSubmitTime))
+                .toList();
+    }
 
-	@ApiOperation(value = "查询所有任务")
-	@GetMapping("/list")
-	public List<Task> list() {
-		return this.taskStoreService.list().stream()
-				.sorted((t1, t2) -> CompareUtil.compare(t2.getSubmitTime(), t1.getSubmitTime()))
-				.toList();
-	}
+    @ApiOperation(value = "查询所有任务")
+    @GetMapping("/list")
+    public List<Task> list() {
+        return this.taskStoreService.list().stream()
+                .sorted((t1, t2) -> CompareUtil.compare(t2.getSubmitTime(), t1.getSubmitTime()))
+                .toList();
+    }
 
-	@ApiOperation(value = "根据ID列表查询任务")
-	@PostMapping("/list-by-condition")
-	public List<Task> listByIds(@RequestBody TaskConditionDTO conditionDTO) {
-		if (conditionDTO.getIds() == null) {
-			return Collections.emptyList();
-		}
-		return conditionDTO.getIds().stream().map(this.taskStoreService::get).filter(Objects::nonNull).toList();
-	}
+    @ApiOperation(value = "根据ID列表查询任务")
+    @PostMapping("/list-by-condition")
+    public List<Task> listByIds(@RequestBody TaskConditionDTO conditionDTO) {
+        if (conditionDTO.getIds() == null) {
+            return Collections.emptyList();
+        }
+        return conditionDTO.getIds().stream().map(this.taskStoreService::get).filter(Objects::nonNull).toList();
+    }
 
-	private String imgUrlChange(String imgUrl) {
-		log.info("传入的url:{}", imgUrl);
-		if (StrUtil.isBlank(imgUrl)) {
-			return imgUrl;
-		}
+    private String imgUrlChange(String imgUrl) {
 
-		String newurl = StrUtil.replace(imgUrl, properties.getImgProxy().getExitdomain(), properties.getImgProxy().getPredomain());
-		log.info("替换域名,{}", newurl);
-		String back= newurl.substring(0, newurl.indexOf("?"));
-		log.info("去掉后缀,{}", back);
-		return back;
-	}
+        if (StrUtil.isBlank(imgUrl)) {
+            return imgUrl;
+        }
+        log.info("task传入的url:{}", imgUrl);
+        String newurl = StrUtil.replace(imgUrl, properties.getImgProxy().getExitdomain(), properties.getImgProxy().getPredomain());
+        log.info("task替换域名,{}", newurl);
+        int index = newurl.indexOf("?");
+        String result = (index != -1) ? newurl.substring(0, index) : newurl;
+        log.info("task去掉后缀,{}", result);
+        return result;
+    }
 
 }

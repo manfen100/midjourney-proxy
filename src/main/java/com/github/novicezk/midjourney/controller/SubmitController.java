@@ -32,6 +32,7 @@ import eu.maxschuster.dataurl.IDataUrlSerializer;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -47,6 +48,7 @@ import java.util.Set;
 @RestController
 @RequestMapping("/submit")
 @RequiredArgsConstructor
+@Slf4j
 public class SubmitController {
 	private final TranslateService translateService;
 	private final TaskStoreService taskStoreService;
@@ -228,11 +230,15 @@ public class SubmitController {
 	}
 
 	private String imgUrlChange(String imgUrl) {
+		log.info("传入的url:{}", imgUrl);
 		if (StrUtil.isBlank(imgUrl)) {
 			return imgUrl;
 		}
 
 		String newurl = StrUtil.replace(imgUrl, properties.getImgProxy().getExitdomain(), properties.getImgProxy().getPredomain());
-		return newurl;
+		log.info("替换域名,{}", newurl);
+		String back= newurl.substring(0, newurl.indexOf("?"));
+		log.info("去掉后缀,{}", back);
+		return back;
 	}
 }

@@ -11,6 +11,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -27,6 +28,7 @@ import java.util.Objects;
 @RestController
 @RequestMapping("/task")
 @RequiredArgsConstructor
+@Slf4j
 public class TaskController {
 	private final TaskStoreService taskStoreService;
 	private final DiscordLoadBalancer discordLoadBalancer;
@@ -67,12 +69,16 @@ public class TaskController {
 	}
 
 	private String imgUrlChange(String imgUrl) {
+		log.info("传入的url:{}", imgUrl);
 		if (StrUtil.isBlank(imgUrl)) {
 			return imgUrl;
 		}
 
 		String newurl = StrUtil.replace(imgUrl, properties.getImgProxy().getExitdomain(), properties.getImgProxy().getPredomain());
-		return newurl;
+		log.info("替换域名,{}", newurl);
+		String back= newurl.substring(0, newurl.indexOf("?"));
+		log.info("去掉后缀,{}", back);
+		return back;
 	}
 
 }

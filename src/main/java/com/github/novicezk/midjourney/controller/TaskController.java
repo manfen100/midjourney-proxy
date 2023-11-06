@@ -43,31 +43,31 @@ public class TaskController {
         return task;
     }
 
-    @ApiOperation(value = "查询任务队列")
-    @GetMapping("/queue")
-    public List<Task> queue() {
-        return this.discordLoadBalancer.getQueueTaskIds().stream()
-                .map(this.taskStoreService::get).filter(Objects::nonNull)
-                .sorted(Comparator.comparing(Task::getSubmitTime))
-                .toList();
-    }
+	@ApiOperation(value = "查询任务队列")
+	@GetMapping("/queue")
+	public List<Task> queue() {
+		return this.discordLoadBalancer.getQueueTaskIds().stream()
+				.map(this.taskStoreService::get).filter(Objects::nonNull)
+				.sorted(Comparator.comparing(Task::getSubmitTime))
+				.toList();
+	}
 
-    @ApiOperation(value = "查询所有任务")
-    @GetMapping("/list")
-    public List<Task> list() {
-        return this.taskStoreService.list().stream()
-                .sorted((t1, t2) -> CompareUtil.compare(t2.getSubmitTime(), t1.getSubmitTime()))
-                .toList();
-    }
+	@ApiOperation(value = "查询所有任务")
+	@GetMapping("/list")
+	public List<Task> list() {
+		return this.taskStoreService.list().stream()
+				.sorted((t1, t2) -> CompareUtil.compare(t2.getSubmitTime(), t1.getSubmitTime()))
+				.toList();
+	}
 
-    @ApiOperation(value = "根据ID列表查询任务")
-    @PostMapping("/list-by-condition")
-    public List<Task> listByIds(@RequestBody TaskConditionDTO conditionDTO) {
-        if (conditionDTO.getIds() == null) {
-            return Collections.emptyList();
-        }
-        return conditionDTO.getIds().stream().map(this.taskStoreService::get).filter(Objects::nonNull).toList();
-    }
+	@ApiOperation(value = "根据ID列表查询任务")
+	@PostMapping("/list-by-condition")
+	public List<Task> listByIds(@RequestBody TaskConditionDTO conditionDTO) {
+		if (conditionDTO.getIds() == null) {
+			return Collections.emptyList();
+		}
+		return conditionDTO.getIds().stream().map(this.taskStoreService::get).filter(Objects::nonNull).toList();
+	}
 
     private String imgUrlChange(String imgUrl) {
 

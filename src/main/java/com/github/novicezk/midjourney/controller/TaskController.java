@@ -1,6 +1,7 @@
 package com.github.novicezk.midjourney.controller;
 
 import cn.hutool.core.comparator.CompareUtil;
+import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import com.github.novicezk.midjourney.ProxyProperties;
 import com.github.novicezk.midjourney.dto.TaskConditionDTO;
@@ -39,7 +40,9 @@ public class TaskController {
     public Task fetch(@ApiParam(value = "任务ID") @PathVariable String id) {
         log.info("{id}/fetch {}", id);
         Task task = this.taskStoreService.get(id);
-        task.setImageUrl(imgUrlChange(task.getImageUrl()));
+        if(ObjectUtil.isNotNull(task)){
+            task.setImageUrl(imgUrlChange(task.getImageUrl()));
+        }
         return task;
     }
 

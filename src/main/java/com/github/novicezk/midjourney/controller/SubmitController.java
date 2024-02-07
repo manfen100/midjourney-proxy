@@ -250,7 +250,7 @@ public class SubmitController {
 //		int index = newurl.indexOf("?");
 //		String result = (index != -1) ? newurl.substring(0, index) : newurl;
 //		log.info("submit去掉后缀,{}", result);
-		return result;
+		return newurl;
 	}
 
 }

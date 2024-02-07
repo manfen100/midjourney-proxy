@@ -80,9 +80,9 @@ public class TaskController {
         log.info("task传入的url:{}", imgUrl);
         String newurl = StrUtil.replace(imgUrl, properties.getImgProxy().getExitdomain(), properties.getImgProxy().getPredomain());
         log.info("task替换域名,{}", newurl);
-        int index = newurl.indexOf("?");
-        String result = (index != -1) ? newurl.substring(0, index) : newurl;
-        log.info("task去掉后缀,{}", result);
+//        int index = newurl.indexOf("?");
+//        String result = (index != -1) ? newurl.substring(0, index) : newurl;
+//        log.info("task去掉后缀,{}", result);
         return result;
     }
 

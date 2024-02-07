@@ -247,9 +247,9 @@ public class SubmitController {
 
 		String newurl = StrUtil.replace(imgUrl, properties.getImgProxy().getExitdomain(), properties.getImgProxy().getPredomain());
 		log.info("submit替换域名,{}", newurl);
-		int index = newurl.indexOf("?");
-		String result = (index != -1) ? newurl.substring(0, index) : newurl;
-		log.info("submit去掉后缀,{}", result);
+//		int index = newurl.indexOf("?");
+//		String result = (index != -1) ? newurl.substring(0, index) : newurl;
+//		log.info("submit去掉后缀,{}", result);
 		return result;
 	}
 

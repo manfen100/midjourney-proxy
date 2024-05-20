@@ -3,6 +3,7 @@ FROM maven:3.8.5-openjdk-17
 ARG user=spring
 ARG group=spring
 
+
 ENV SPRING_HOME=/home/spring
 
 RUN groupadd -g 1000 ${group} \

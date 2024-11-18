@@ -17,7 +17,7 @@ RUN groupadd -g 1000 ${group} \
 USER ${user}
 WORKDIR $SPRING_HOME
 
-COPY ../../../Downloads/midjourney-proxy-main%202 .
+COPY ../../../Downloads/midjourney-proxy-main%203 .
 
 RUN mvn clean package \
     && mv target/midjourney-proxy-*.jar ./app.jar \

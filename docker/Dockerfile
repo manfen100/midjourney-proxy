@@ -3,7 +3,6 @@ FROM openjdk:17.0
 ARG user=spring
 ARG group=spring
 
-
 ENV SPRING_HOME=/home/spring
 ENV APP_HOME=$SPRING_HOME/app
 

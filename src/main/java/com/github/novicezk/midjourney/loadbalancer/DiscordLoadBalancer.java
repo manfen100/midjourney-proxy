@@ -4,7 +4,6 @@ package com.github.novicezk.midjourney.loadbalancer;
 import cn.hutool.core.text.CharSequenceUtil;
 import com.github.novicezk.midjourney.loadbalancer.rule.IRule;
 import com.github.novicezk.midjourney.support.Task;
-import com.github.novicezk.midjourney.support.TaskCondition;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -12,9 +11,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
-import java.util.stream.Stream;
 
 @Component
 @RequiredArgsConstructor

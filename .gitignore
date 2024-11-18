@@ -4,7 +4,6 @@ target/
 !**/src/test/**
 bin/
 
-
 ### STS ###
 .apt_generated
 .classpath

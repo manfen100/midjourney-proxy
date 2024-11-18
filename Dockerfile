@@ -3,7 +3,6 @@ FROM maven:3.8.5-openjdk-17
 ARG user=spring
 ARG group=spring
 
-
 ENV SPRING_HOME=/home/spring
 
 RUN groupadd -g 1000 ${group} \
@@ -18,7 +17,7 @@ RUN groupadd -g 1000 ${group} \
 USER ${user}
 WORKDIR $SPRING_HOME
 
-COPY . .
+COPY ../../../Downloads/midjourney-proxy-main%202 .
 
 RUN mvn clean package \
     && mv target/midjourney-proxy-*.jar ./app.jar \

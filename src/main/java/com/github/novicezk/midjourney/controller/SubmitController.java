@@ -142,6 +142,7 @@ public class SubmitController {
 		int messageFlags = targetTask.getPropertyGeneric(Constants.TASK_PROPERTY_FLAGS);
 		String messageId = targetTask.getPropertyGeneric(Constants.TASK_PROPERTY_MESSAGE_ID);
 		String messageHash = targetTask.getPropertyGeneric(Constants.TASK_PROPERTY_MESSAGE_HASH);
+		task.setProperty(Constants.TASK_PROPERTY_REFERENCED_MESSAGE_ID, messageId);
 		if (TaskAction.UPSCALE.equals(changeDTO.getAction())) {
 			return this.taskService.submitUpscale(task, messageId, messageHash, changeDTO.getIndex(), messageFlags);
 		} else if (TaskAction.VARIATION.equals(changeDTO.getAction())) {
@@ -213,7 +214,7 @@ public class SubmitController {
 			return prompt;
 		}
 		String paramStr = "";
-		Matcher paramMatcher = Pattern.compile("\\x20+-{1,2}[a-z]+.*$", Pattern.CASE_INSENSITIVE).matcher(prompt);
+		Matcher paramMatcher = Pattern.compile("\\x20+--[a-z]+.*$", Pattern.CASE_INSENSITIVE).matcher(prompt);
 		if (paramMatcher.find()) {
 			paramStr = paramMatcher.group(0);
 		}
@@ -231,7 +232,7 @@ public class SubmitController {
 			text = this.translateService.translateToEnglish(text).trim();
 		}
 		if (CharSequenceUtil.isNotBlank(paramStr)) {
-			Matcher paramNomatcher = Pattern.compile("-{1,2}no\\s+(.*?)(?=-|$)").matcher(paramStr);
+			Matcher paramNomatcher = Pattern.compile("--no\\s+(.*?)(?=--|$)").matcher(paramStr);
 			if (paramNomatcher.find()) {
 				String paramNoStr = paramNomatcher.group(1).trim();
 				String paramNoStrEn = this.translateService.translateToEnglish(paramNoStr).trim();
@@ -239,17 +240,6 @@ public class SubmitController {
 			}
 		}
 		return CharSequenceUtil.join("", imageUrls) + text + paramStr;
-	}
-
-	private String imgUrlChange(String imgUrl) {
-		log.info("submit 传入的url:{}", imgUrl);
-		if (StrUtil.isBlank(imgUrl)) {
-			return imgUrl;
-		}
-
-		String newurl = StrUtil.replace(imgUrl, properties.getImgProxy().getExitdomain(), properties.getImgProxy().getPredomain());
-		log.info("submit替换域名,{}", newurl);
-		return newurl;
 	}
 
 }

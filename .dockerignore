@@ -1,6 +1,5 @@
 target/
 
-
 ### IntelliJ IDEA ###
 .idea
 *.iws
@@ -17,7 +16,7 @@ target/
 config/application.yml
 
 .git
-.gitignore
+../../../Downloads/midjourney-proxy-main 2/.gitignore
 docker
 docs
 README.md
